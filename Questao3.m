@@ -13,16 +13,10 @@ S4=7*(s+176/7)/(s+14)/(s+25);                                               % F.
 A=S1*S2*(S3+S4)/(1-(S1*S2*(S3+S4))/12);                                     % F.Trans de Subsistema 5
 S5=A*S1;
 
-step(S5);                                                                  % Grafico do sistema
-Y=minreal(S5*U);                                                           % Aproximar
-impulse(Y);
-[z, p, k] = tf2zp(Y.num{1,1}, Y.den{1,1});                                 % Zeros, polos e ganhos (para degrau)
-
-y_real=s/s;
-for i = 1:length(z)
-    y_real=y_real*(s-z(i))
-end
-for i = 1:length(p)
-    y_real=y_real/(s-p(i))
-end
-
+step(S5, 18);                                                               % Grafico do sistema
+figure
+Y=S5*U;
+[z, p, k] = tf2zp(Y.num{1,1}, Y.den{1,1});                                  % Zeros, polos e ganhos (para degrau)
+Y=minreal(S5*U, sqrt(eps)*2000000);                                         % Aproximar
+impulse(Y, 18);
+[z_sim, p_sim, k_sim] = tf2zp(Y.num{1,1}, Y.den{1,1});                      % Zeros, polos e ganhos (para degrau simplificado)
